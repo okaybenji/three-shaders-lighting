@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body></body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>
+  <script id="fragShader" type="shader-code">
+    uniform vec2 resolution;
+    uniform float time;
+    uniform sampler2D texture;
+    uniform sampler2D normalMap;
+    uniform vec2 mousePos;
+
+    void main() {
+      // Get the position of this pixel.
+      vec2 pos = gl_FragCoord.xy / resolution.xy;
+
+      // Y mouse position, corrected for shader coordinates.
+      float flippedY = resolution.y - mousePos.y;
+
+      // Position our light where the mouse is.
+      vec2 lightPos = vec2(mousePos.x / resolution.x, flippedY / resolution.y);
+
+      // Define a radius for the light.
+      float lightRadius = 0.5;
+
+      // Get the texture at the current pixel position.
+      vec4 tex = texture2D(texture, pos);
+
+      // Calculate the distance of this pixel from the light.
+      float dist = distance(pos, lightPos);
+
+      // Multiply RGBA by the distance from the light.
+      gl_FragColor = tex * (1.0 - dist/lightRadius);
+    }
+  </script>
+  <script src="index.js"></script>
+</html>
