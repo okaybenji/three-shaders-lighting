@@ -50,7 +50,7 @@
       // Set a minimum brightness.
       float ambientLevel = 0.05;
 
-      // Multiply RGBA by the distance from the light.
+      // Apply lighting. If this pixel would be black, use ambient lighting.
       gl_FragColor = max(tex * diffuse * lightIntensity * falloff, tex * ambientLevel);
     }
   </script>
