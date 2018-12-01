@@ -22,16 +22,36 @@
       vec2 lightPos = vec2(mousePos.x / resolution.x, flippedY / resolution.y);
 
       // Define a radius for the light.
-      float lightRadius = 0.5;
+      float lightRadius = 0.85;
+      float lightIntensity = 2.5;
 
       // Get the texture at the current pixel position.
       vec4 tex = texture2D(texture, pos);
 
+      // Calculate how much light should reach the plane.
+      vec3 normalVector = normalize(texture2D(normalMap, pos).xyz);
+      normalVector.x -= 0.5;
+      normalVector.y -= 0.5;
+
+      float lightVectorX = (lightPos.x - pos.x) * resolution.x;
+      float lightVectorY = (lightPos.y - pos.y) * resolution.y;
+      vec3 lightVector = normalize(vec3(lightVectorX, lightVectorY, 100.0));
+
+      // Calculate light diffusion from the normal and light vectors.
+      float diffuse = dot( normalVector, lightVector );
+
+      // Clamp the diffusion to positive values.
+      diffuse = max(diffuse, 0.0);
+
       // Calculate the distance of this pixel from the light.
       float dist = distance(pos, lightPos);
+      float falloff = (1. - dist/lightRadius);
+
+      // Set a minimum brightness.
+      float ambientLevel = 0.05;
 
       // Multiply RGBA by the distance from the light.
-      gl_FragColor = tex * (1.0 - dist/lightRadius);
+      gl_FragColor = max(tex * diffuse * lightIntensity * falloff, tex * ambientLevel);
     }
   </script>
   <script src="index.js"></script>

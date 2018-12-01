@@ -1,4 +1,4 @@
-// Based on this tutorial: https://gamedevelopment.tutsplus.com/tutorials/a-beginners-guide-to-coding-graphics-shaders-part-2--cms-24111
+// Based on this tutorial: https://gamedevelopment.tutsplus.com/tutorials/a-beginners-guide-to-coding-graphics-shaders-part-3--cms-24351
 
 /** Set up Three.js **/
 // First we initialize the scene and our camera
@@ -13,7 +13,10 @@ document.body.appendChild( renderer.domElement );
 /** Configure our shader **/
 // Prepare the texture
 THREE.ImageUtils.crossOrigin = ''; // Allows us to load an external image
-const tex = THREE.ImageUtils.loadTexture( 'https://media.giphy.com/media/oYtVHSxngR3lC/giphy.gif' );
+const tex = THREE.ImageUtils.loadTexture( 'https://raw.githubusercontent.com/tutsplus/Beginners-Guide-to-Shaders/master/Part3/images/blocks.JPG' );
+
+// And its normal map
+const normal = THREE.ImageUtils.loadTexture( 'https://raw.githubusercontent.com/tutsplus/Beginners-Guide-to-Shaders/master/Part3/normal_maps/blocks_normal.JPG' );
 
 // Get the shader code
 const fragmentShader = document.getElementById('fragShader').innerHTML;
@@ -32,6 +35,10 @@ const uniforms = {
   texture: {
     type: 't',
     value: tex,
+  },
+  normalMap: {
+    type:'t',
+    value: normal,
   },
   mousePos: {
     type:'v2',
