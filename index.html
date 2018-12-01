@@ -18,39 +18,41 @@
       // Y mouse position, corrected for shader coordinates.
       float flippedY = resolution.y - mousePos.y;
 
-      // Position our light where the mouse is.
-      vec2 lightPos = vec2(mousePos.x / resolution.x, flippedY / resolution.y);
-
-      // Define a radius for the light.
-      float lightRadius = 0.85;
-      float lightIntensity = 2.5;
+      // Position our light above the mouse.
+      float lightHeight = 100.;
+      vec3 lightPos = vec3( mousePos.x / resolution.x, flippedY / resolution.y, lightHeight );
 
       // Get the texture at the current pixel position.
-      vec4 tex = texture2D(texture, pos);
+      vec4 tex = texture2D( texture, pos );
 
       // Calculate how much light should reach the plane.
       vec3 normalVector = normalize(texture2D(normalMap, pos).xyz);
+      // Ya just gotta do this. (See the tutorial for more info.)
       normalVector.x -= 0.5;
       normalVector.y -= 0.5;
 
-      float lightVectorX = (lightPos.x - pos.x) * resolution.x;
-      float lightVectorY = (lightPos.y - pos.y) * resolution.y;
-      vec3 lightVector = normalize(vec3(lightVectorX, lightVectorY, 100.0));
+      float lightVectorX = ( lightPos.x - pos.x ) * resolution.x;
+      float lightVectorY = ( lightPos.y - pos.y ) * resolution.y;
+      vec3 lightVector = normalize(vec3(lightVectorX, lightVectorY, lightPos.z));
 
-      // Calculate light diffusion from the normal and light vectors.
+      // Calculate light diffusion from the normal & light vectors.
       float diffuse = dot( normalVector, lightVector );
 
       // Clamp the diffusion to positive values.
-      diffuse = max(diffuse, 0.0);
+      diffuse = max( diffuse, 0.0 );
+
+      // Define other light properties.
+      float lightRadius = 0.85;
+      float lightIntensity = 2.5;
 
       // Calculate the distance of this pixel from the light.
-      float dist = distance(pos, lightPos);
-      float falloff = (1. - dist/lightRadius);
+      float dist = distance( pos, lightPos.xy );
+      float falloff = ( 1. - dist/lightRadius );
 
       // Set a minimum brightness.
       float ambientLevel = 0.05;
 
-      // Apply lighting. If this pixel would be black, use ambient lighting.
+      // Apply lighting. (If this pixel would be black, use ambient lighting.)
       gl_FragColor = max(tex * diffuse * lightIntensity * falloff, tex * ambientLevel);
     }
   </script>
