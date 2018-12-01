@@ -1,11 +1,11 @@
 // Based on this tutorial: https://gamedevelopment.tutsplus.com/tutorials/a-beginners-guide-to-coding-graphics-shaders-part-3--cms-24351
 
 /** Set up Three.js **/
-// First we initialize the scene and our camera
+// Initialize the scene and our camera
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-// We create the WebGL renderer and add it to the document
+// Create the WebGL renderer and add it to the document
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
@@ -37,7 +37,7 @@ const uniforms = {
     value: tex,
   },
   normalMap: {
-    type:'t',
+    type: 't',
     value: normal,
   },
   mousePos: {
@@ -55,17 +55,17 @@ mesh.position.z = -1.25; // Shift the mesh back so we can see it
 
 /** Start animating **/
 const render = () => {
-  // Update our shader's uniforms.
+  // Update our shader's uniforms
   uniforms.time.value = Date.now() - startTime;
 
-  // Animate the scene.
+  // Animate the scene
   requestAnimationFrame( render );
   renderer.render( scene, camera );
 };
 
 render();
 
-// Listen for events to update uniforms.
+// Listen for events to update uniforms
 window.onresize = function(event){
   renderer.setSize(window.innerWidth, window.innerHeight);
   uniforms.resolution.value.x = window.innerWidth;
@@ -73,7 +73,7 @@ window.onresize = function(event){
 }
 
 document.onmousemove = function(event){
-    //Update the light source to follow our mouse
+    // Update the light source to follow our mouse
     uniforms.mousePos.value.x = event.clientX;
     uniforms.mousePos.value.y = event.clientY;
 }

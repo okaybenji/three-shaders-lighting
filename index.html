@@ -53,7 +53,7 @@
       float ambientLevel = 0.05;
 
       // Apply lighting. (If this pixel would be black, use ambient lighting.)
-      gl_FragColor = max(tex * diffuse * lightIntensity * falloff, tex * ambientLevel);
+      gl_FragColor = max( tex * diffuse * lightIntensity * falloff, tex * ambientLevel );
     }
   </script>
   <script src="index.js"></script>
